@@ -17,7 +17,7 @@ class SQLiteDB(object):
         else:
             self.conn = sqlite3.connect(self.database, check_same_thread=False)
             self.conn.isolation_level = None
-            # Populates database with empty tables for modules which require them for function
+            # Populates database with empty tables for modules which require them to function.
             self.conn.execute(open('../sql/py_users.sql').read())
             self.conn.execute(open('../sql/py_quotes.sql').read())
             self.conn.execute(open('../sql/py_facts.sql').read())
