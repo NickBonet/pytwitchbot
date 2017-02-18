@@ -20,7 +20,7 @@ serverpass = oauth:goeshere
 nick = kshad98
 ident = kshad98
 host = *
-pass = testpassword
+pass = test
 
 [modules]
 autoload = modloader,join,quotes,help,facts,usermanage
