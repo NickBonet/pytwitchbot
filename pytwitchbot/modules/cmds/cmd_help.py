@@ -14,11 +14,9 @@ class CmdModuleHelp(CmdModule):
     def help_cmd(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
             if args[1] in self.irc.modhandler.commands:
-                cmd = self.irc.modhandler.commands[args[1]]
-                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[1], "chan"))
             elif args[1] in self.irc.modhandler.privcmds and not dest.startswith('#'):
-                cmd = self.irc.modhandler.privcmds[args[1]]
-                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[1], "priv"))
             # elif args[1] == "all":
             #   for cmd in self.irc.modhandler.commands:
             #        self.irc.msg(dest, self.irc.modhandler.commands[cmd]['help'])
