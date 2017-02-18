@@ -87,11 +87,6 @@ class IRCBotClient(irc.IRCClient):
         for module in modulelist:
             self.modhandler.load_cmd_module(module)
 
-    # Loads NickServ password from configuration and identifies. ###
-    def nickserv_identify(self):
-        nickservpass = self.conf.get_option('info', 'nickservpass')
-        self.msg('NickServ', 'IDENTIFY %s' % nickservpass)
-
     # Returns the address of the IRC server from configuration. ###
     def get_server(self):
         return self.conf.get_option('server', 'address')
@@ -103,7 +98,6 @@ class IRCBotClient(irc.IRCClient):
     # When the MOTD is received, we assume it's safe to start joining
     # channels. ###
     def receivedMOTD(self, motd):
-        self.nickserv_identify()
         self.load_mods()
         self.perms.load_bot_master()
         self.perms.load_users()
