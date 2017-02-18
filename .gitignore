@@ -1,0 +1,6 @@
+*.pyc
+.pydevproject
+.project
+geany_run_script.sh
+.idea
+pytwitchbot/pytwitchbot.conf
