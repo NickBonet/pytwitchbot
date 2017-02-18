@@ -17,8 +17,8 @@ realname = pystreambot
 serverpass = oauth:goeshere
 
 [botmaster]
-nick = kshad98
-ident = kshad98
+nick = test
+ident = test
 host = *
 pass = test
 
@@ -26,12 +26,8 @@ pass = test
 command_prefix = !
 autoload = modloader,join,quotes,help,facts,usermanage
 
-[mysql]
-host = 127.0.0.1
-port = 3311
-user = root
-pass = root
-database = pyircbot
+[sqlite]
+database = pyircbot.db
 
 [github]
 user = test

@@ -6,7 +6,7 @@ from twisted.words.protocols import irc
 from modules.cmdhandler import CmdHandler
 from modules.core.antiflood import BotAntiflood
 from modules.core.config import Config
-from modules.core.mysql import MySQL
+from modules.core.sqlitedb import SQLiteDB
 from modules.core.userperm import UserPerm
 
 
@@ -30,7 +30,7 @@ class IRCBotClient(irc.IRCClient):
         self.log = log
         self.cmd_prefix = self.conf.get_option('modules', 'command_prefix')
         self.modhandler = CmdHandler(self.log, self)
-        self.sql = MySQL(self.conf)
+        self.sql = SQLiteDB(self.conf)
         self.perms = UserPerm(self.sql, self.conf)
         self.bot_antiflood = BotAntiflood()
         self.bot_antiflood.setDaemon(True)
@@ -38,7 +38,7 @@ class IRCBotClient(irc.IRCClient):
     # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
-        self.log.output("DEBUG OUTPUT: %s" % line_str)
+        #self.log.output("DEBUG OUTPUT: %s" % line_str)
         if line_str.startswith('@'):
             tags = line_str[1:].split(':')[0].split(' ')[0].split(';')
             tags = dict(t.split('=') for t in tags)

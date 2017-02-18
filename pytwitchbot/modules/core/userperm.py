@@ -13,9 +13,7 @@ class UserPerm:
     # Adds a user to the database. ###
     def add_user(self, userinfo, passwd, level):
         if level <= 3:
-            self.sql.sql_query('INSERT INTO py_users VALUES (%s, %s, %s, %s, %i)'
-                               % (self.sql.escape(userinfo[0]), self.sql.escape(userinfo[1]),
-                                  self.sql.escape(userinfo[2]), self.sql.escape(passwd), int(level)))
+            self.sql.sql_query('INSERT INTO py_users VALUES (?, ?, ?, ?, ?)', (userinfo[0], userinfo[1],  userinfo[2], passwd, int(level),))
             self.users = {}
             self.load_users()
             self.load_bot_master()
@@ -26,8 +24,7 @@ class UserPerm:
     # Deletes a user from the database. ###
     def del_user(self, user):
         try:
-            self.sql.sql_query('DELETE FROM py_users WHERE nick=%s' % (
-                self.sql.escape(user)))
+            self.sql.sql_query('DELETE FROM py_users WHERE nick=?' % (user,))
             self.users = {}
             self.load_users()
             self.load_bot_master()
@@ -41,18 +38,15 @@ class UserPerm:
         masternick = self.conf.get_option('botmaster', 'nick')
         masterident = self.conf.get_option('botmaster', 'ident')
         masterhost = self.conf.get_option('botmaster', 'host')
-        masterpass = hashlib.sha1(str(self.conf.get_option(
-            'botmaster', 'pass')).encode('utf-8')).hexdigest()
-        infodict = {'ident': masterident, 'host':
-                    masterhost, 'level': 3, 'pass': masterpass}
+        masterpass = hashlib.sha1(str(self.conf.get_option('botmaster', 'pass')).encode('utf-8')).hexdigest()
+        infodict = {'ident': masterident, 'host':masterhost, 'level': 3, 'pass': masterpass}
         self.users.update({masternick: infodict})
 
-    # Loads users from MySQL and stores them into a local dictionary. ###
+    # Loads users from SQLite and stores them into a local dictionary. ###
     def load_users(self):
         self.sql.sql_query('SELECT * FROM py_users')
         for nick, ident, host, passwd, level in self.sql.fetch_all():
-            infodict = {'ident': ident, 'host':
-                        host, 'level': level, 'pass': passwd}
+            infodict = {'ident': ident, 'host':host, 'level': level, 'pass': passwd}
             self.users.update({nick: infodict})
 
     # Actually checks if user has permission to run a command. ###

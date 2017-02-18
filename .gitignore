@@ -4,3 +4,4 @@
 geany_run_script.sh
 .idea
 pytwitchbot/pytwitchbot.conf
+pytwitchbot/pyircbot.db

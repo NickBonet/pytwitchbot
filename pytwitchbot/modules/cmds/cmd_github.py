@@ -11,8 +11,7 @@ class CmdModuleGithub(CmdModule):
             'grecent': {'function': self.get_last_commit,
                         'help': 'grecent <user> <repo> - Gets the latest commit from a specified repo.'}}
         self.mod_type = 'chan'
-        self.git = Github(self.irc.conf.get_option(
-            'github', 'user'), self.irc.conf.get_option('github', 'pass'))
+        self.git = Github(self.irc.conf.get_option('github', 'user'), self.irc.conf.get_option('github', 'pass'))
 
     def get_last_commit(self, userinfo, dest, args):
         commit = None
