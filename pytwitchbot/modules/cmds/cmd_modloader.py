@@ -8,15 +8,15 @@ class CmdModuleModloader(CmdModule):
     def __init__(self, log, irc):
         super().__init__(log, irc)
         self.cmd_dict = {
-            '!loadmod': {'function': self.load_mod, 'help':
-                         '!loadmod <module> - Loads a module.'},
-            '!unloadmod': {'function': self.unload_mod, 'help':
-                           '!unloadmod <module> - Unloads a module.'},
-            '!reloadmod': {'function': self.reload_mod, 'help':
-                           '!reloadmod <module> - Reloads a module.'},
-            '!rehash': {'function': self.reload_conf, 'help': '!rehash - Reloads the configuration file.'}}
+            'loadmod': {'function': self.load_mod, 'help':
+                        'loadmod <module> - Loads a module.'},
+            'unloadmod': {'function': self.unload_mod, 'help':
+                          'unloadmod <module> - Unloads a module.'},
+            'reloadmod': {'function': self.reload_mod, 'help':
+                          'reloadmod <module> - Reloads a module.'},
+            'rehash': {'function': self.reload_conf, 'help': 'rehash - Reloads the configuration file.'}}
         self.mod_perm_level = 3
-        self.mod_type = 'chan'
+        self.mod_type = 'all'
 
     def load_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
@@ -26,7 +26,7 @@ class CmdModuleModloader(CmdModule):
                 else:
                     self.irc.msg(dest, 'Unable to load %s module.' % (args[1]))
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -40,7 +40,7 @@ class CmdModuleModloader(CmdModule):
                     self.irc.msg(
                         dest, 'Error unloading %s module.' % (args[1]))
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -54,7 +54,7 @@ class CmdModuleModloader(CmdModule):
                     self.irc.msg(
                         dest, 'Error reloading %s module.' % (args[1]))
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -67,5 +67,3 @@ class CmdModuleModloader(CmdModule):
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
 
-    def get_cmds(self):
-        return self.cmd_dict

@@ -10,9 +10,9 @@ class CmdModuleUsermanage(CmdModule):
     def __init__(self, log, irc):
         super().__init__(log, irc)
         self.cmd_dict = {
-            '!adduser': {'function': self.add_user_cmd, 'help':
-                         '!adduser <nick> <ident> <hostmask> <password> <rank> - Adds a user to the database.'},
-            '!deluser': {'function': self.del_user_cmd, 'help': '!deluser <nick> - Deletes a user from the database.'}}
+            'adduser': {'function': self.add_user_cmd, 'help':
+                        'adduser <nick> <ident> <hostmask> <password> <rank> - Adds a user to the database.'},
+            'deluser': {'function': self.del_user_cmd, 'help': 'deluser <nick> - Deletes a user from the database.'}}
         self.mod_perm_level = 3
         self.mod_type = 'priv'
 
@@ -27,7 +27,7 @@ class CmdModuleUsermanage(CmdModule):
                 else:
                     self.irc.msg(dest, 'Unable to add user.')
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -41,10 +41,8 @@ class CmdModuleUsermanage(CmdModule):
                 else:
                     self.irc.msg(dest, 'Unable to delete user.')
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
 
-    def get_cmds(self):
-        return self.cmd_dict

@@ -5,17 +5,19 @@ class CmdModule(object):
         self.log = log
         # IRC bot protocol instance. ###
         self.irc = irc
+        # Dictionary which maps command names to their functions in a module,
+        # as well as information on how to use the command
         self.cmd_dict = {}
+        # Dictionary which maps IRC events to functions one may want to execute during said events when they occur
         self.hook_dict = {}
+        # Defines whether the module is intended to work in channels only, private messages only, or both
         self.mod_type = ''
+        # Defines what level of permission is required to run some or all commands in a module
         self.mod_perm_level = None
 
-    # The list of commands and the functions they bind to. ###
     def get_cmds(self):
         return self.cmd_dict
 
-    # Optional, allow your module to hook
-    # to other IRC events, such as joins, quits, etc. ###
     def get_hooks(self):
         return self.hook_dict
 

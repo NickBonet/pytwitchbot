@@ -23,6 +23,7 @@ host = *
 pass = test
 
 [modules]
+command_prefix = !
 autoload = modloader,join,quotes,help,facts,usermanage
 
 [mysql]

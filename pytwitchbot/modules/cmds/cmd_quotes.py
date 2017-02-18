@@ -8,14 +8,14 @@ class CmdModuleQuotes(CmdModule):
     def __init__(self, log, irc):
         super().__init__(log, irc)
         self.cmd_dict = {
-            '!qadd': {'function': self.add_quote, 'help':
-                      '!qadd <text to quote> - Adds a quote to the database.'},
-            '!qdel': {'function': self.del_quote, 'help':
-                      '!qdel <quote number> - Deletes a quote from the database.'},
-            '!qread': {'function': self.read_quote, 'help':
-                       '!qread <quote number> - Displays a quote.'},
-            '!qtotal': {'function': self.count_quotes, 'help':
-                        '!qtotal - Displays the total amount of quotes in the database for the current channel.'}}
+            'qadd': {'function': self.add_quote, 'help':
+                     'qadd <text to quote> - Adds a quote to the database.'},
+            'qdel': {'function': self.del_quote, 'help':
+                     'qdel <quote number> - Deletes a quote from the database.'},
+            'qread': {'function': self.read_quote, 'help':
+                      'qread <quote number> - Displays a quote.'},
+            'qtotal': {'function': self.count_quotes, 'help':
+                       'qtotal - Displays the total amount of quotes in the database for the current channel.'}}
         self.mod_type = 'chan'
 
     def add_quote(self, userinfo, dest, args):
@@ -34,7 +34,7 @@ class CmdModuleQuotes(CmdModule):
                 qid, userinfo[0]))
             self.irc.msg(dest, 'Quote: %s' % (" ".join(args[1:])))
         else:
-            self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+            self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
     def del_quote(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], 1):
@@ -43,7 +43,7 @@ class CmdModuleQuotes(CmdModule):
                     'DELETE FROM py_quotes WHERE qchid=%i AND qchan=\'%s\'' % (int(args[1]), dest))
                 self.irc.msg(dest, 'Quote has been removed from the database.')
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -63,7 +63,7 @@ class CmdModuleQuotes(CmdModule):
                 self.irc.msg(
                     dest, 'That quote doesn\'t exist in the database!')
         else:
-            self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+            self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
     def count_quotes(self, userinfo, dest, args):
         self.irc.sql.sql_query(
@@ -72,5 +72,3 @@ class CmdModuleQuotes(CmdModule):
         self.irc.msg(
             dest, 'There are %i quotes in the quotes database.' % qtotal)
 
-    def get_cmds(self):
-        return self.cmd_dict

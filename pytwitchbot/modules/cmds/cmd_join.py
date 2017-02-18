@@ -8,10 +8,10 @@ class CmdModuleJoin(CmdModule):
     def __init__(self, log, irc):
         super().__init__(log, irc)
         self.cmd_dict = {
-            '!join': {'function': self.join_chan_cmd, 'help':
-                      '!join <channel> - Makes the bot join a channel.'},
-            '!part': {'function': self.part_chan_cmd, 'help': '!part <channel> - Makes the bot leave a channel.'}}
-        self.hook_dict = {'join': self.greet_nn_join}
+            'join': {'function': self.join_chan_cmd, 'help':
+                     'join <channel> - Makes the bot join a channel.'},
+            'part': {'function': self.part_chan_cmd, 'help': 'part <channel> - Makes the bot leave a channel.'}}
+        self.hook_dict = {}
         self.mod_perm_level = 2
         self.mod_type = 'chan'
 
@@ -27,7 +27,7 @@ class CmdModuleJoin(CmdModule):
                 else:
                     self.irc.msg(dest, 'I\'m already in that channel!')
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
@@ -41,10 +41,8 @@ class CmdModuleJoin(CmdModule):
                 else:
                     self.irc.msg(dest, 'I\'m not in that channel!')
             else:
-                self.irc.msg(dest, self.cmd_dict[args[0]]['help'])
+                self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(
                 dest, 'You don\'t have permission to run that command!')
 
-    def get_cmds(self):
-        return self.cmd_dict

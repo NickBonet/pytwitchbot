@@ -64,6 +64,7 @@ class CmdHandler:
             # Module commands are iterated and added to dictionary of
             # commands. ###
             for cmdname, cmdfunc in modinstance.get_cmds().items():
+                cmdname = self.irc.cmd_prefix + cmdname
                 if modinstance.get_mod_type() == 'priv':
                     self.add_priv_cmd(cmdname, cmdfunc)
                 elif modinstance.get_mod_type() == 'chan':
@@ -97,9 +98,13 @@ class CmdHandler:
         try:
             # The module's commands are iterated and unloaded. ###
             for cmdname, cmdfunc in modinstance.get_cmds().items():
+                cmdname = self.irc.cmd_prefix + cmdname
                 if modinstance.get_mod_type().lower() == 'priv':
                     del self.privcmds[cmdname]
                 elif modinstance.get_mod_type().lower() == 'chan':
+                    del self.commands[cmdname]
+                elif modinstance.get_mod_type().lower() == 'all':
+                    del self.privcmds[cmdname]
                     del self.commands[cmdname]
 
             # The module's hooks are iterated and unloaded. ###
@@ -126,3 +131,11 @@ class CmdHandler:
         except Exception as err:
             self.log.output('Error while reloading %s module: %s' % (module, err))
             return False
+
+    def get_help_text(self, command, channel):
+        if channel == "chan" or channel == "all":
+            cmd = self.commands[command]
+            return str(self.irc.cmd_prefix + cmd['help'])
+        elif channel == "priv":
+            cmd = self.privcmds[command]
+            return str(self.irc.cmd_prefix + cmd['help'])
