@@ -16,7 +16,7 @@ class CmdModuleJoin(CmdModule):
         self.mod_type = 'chan'
 
     def greet_nn_join(self, prefix, params):
-        self.irc.msg(params[0], 'Hello %s!' % prefix.split('!')[0])
+        self.irc.msg(params[0], 'Hello %s, welcome to the stream! Enjoy your stay.' % prefix.split('!')[0])
 
     def join_chan_cmd(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):

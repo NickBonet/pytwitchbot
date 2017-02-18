@@ -20,8 +20,8 @@ class IRCBotClient(irc.IRCClient):
     realname = conf.get_option('info', 'realname')
     password = conf.get_option('info', 'serverpass')
     lineRate = None
-    versionName = 'PyIRCBot Development Build'
-    versionNum = 'Beta'
+    versionName = 'pyTwitchBot'
+    versionNum = 'Dev'
     versionEnv = platform.system() + ' ' + platform.release()
 
     # Initialization for the class ###
@@ -34,13 +34,7 @@ class IRCBotClient(irc.IRCClient):
         self.bot_antiflood = BotAntiflood()
         self.bot_antiflood.setDaemon(True)
 
-    def rawDataReceived(self, data):
-        pass
-
-    def dccSend(self, user, file):
-        pass
-
-    # For debug purposes
+    # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
         if line_str.startswith('@'):
@@ -148,7 +142,7 @@ class IRCBotClient(irc.IRCClient):
             else:
                 return
 
-    # Minor edit of msg method in twisted. IRC class
+    # Minor edit of the msg method in twisted. IRC class
     def msg(self, user, message, length=None):
         if not user.startswith('#'):
             fmt = 'PRIVMSG #jtv :/w %s ' % user
@@ -186,3 +180,9 @@ class IRCBotClient(irc.IRCClient):
     def irc_QUIT(self, prefix, params):
         if prefix.split('!')[0] != self.nickname:
             self.modhandler.call_hook('quit', prefix, params)
+
+    def rawDataReceived(self, data):
+        pass
+
+    def dccSend(self, user, file):
+        pass
