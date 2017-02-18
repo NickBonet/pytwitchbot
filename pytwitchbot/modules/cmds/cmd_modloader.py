@@ -21,7 +21,7 @@ class CmdModuleModloader(CmdModule):
     def load_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
-                if self.irc.modhandler.load_cmd_module(args[1]):
+                if self.irc.modhandler.load_cmd_module(args[1]) is True:
                     self.irc.msg(dest, 'Loaded %s module.' % (args[1]))
                 else:
                     self.irc.msg(dest, 'Unable to load %s module.' % (args[1]))
@@ -34,8 +34,11 @@ class CmdModuleModloader(CmdModule):
     def unload_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
-                if self.irc.modhandler.unload_cmd_module(args[1]):
+                unload = self.irc.modhandler.unload_cmd_module(args[1])
+                if unload is True:
                     self.irc.msg(dest, 'Unloaded %s module.' % (args[1]))
+                elif unload == 2:
+                    self.irc.msg(dest, 'Module %s isn\'t currently loaded.' % (args[1]))
                 else:
                     self.irc.msg(
                         dest, 'Error unloading %s module.' % (args[1]))
@@ -48,7 +51,7 @@ class CmdModuleModloader(CmdModule):
     def reload_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
-                if self.irc.modhandler.reload_cmd_module(args[1]):
+                if self.irc.modhandler.reload_cmd_module(args[1]) is True:
                     self.irc.msg(dest, 'Reloaded %s module.' % (args[1]))
                 else:
                     self.irc.msg(

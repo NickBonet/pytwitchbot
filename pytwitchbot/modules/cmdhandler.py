@@ -90,7 +90,7 @@ class CmdHandler:
         # Checks if module is even loaded. ###
         if module not in self.modules:
             self.log.output('Module %s is not loaded.' % (str(module)))
-            return False
+            return 2
 
         # Gets the instance of the loaded module. ###
         modinstance = self.modules[module]
@@ -125,9 +125,14 @@ class CmdHandler:
     # Simple way to reload modules. ###
     def reload_cmd_module(self, module):
         try:
-            self.unload_cmd_module(module)
-            self.load_cmd_module(module)
-            return True
+            unload = self.unload_cmd_module(module)
+            if unload is True:
+                return self.load_cmd_module(module)
+            elif unload == 2:
+                return self.load_cmd_module(module)
+            else:
+                return False
+
         except Exception as err:
             self.log.output('Error while reloading %s module: %s' % (module, err))
             return False
