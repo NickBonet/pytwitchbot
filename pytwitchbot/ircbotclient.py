@@ -43,20 +43,17 @@ class IRCBotClient(irc.IRCClient):
     # For debug purposes
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
-        tags = None
         if line_str.startswith('@'):
             tags = line_str[1:].split(':')[0].split(' ')[0].split(';')
             tags = dict(t.split('=') for t in tags)
             line_str = ':' + line_str.split(' :', 1)[1]
-            line = str(line_str).encode()
             prefix, cmd, args = irc.parsemsg(line_str)
             if cmd == "PRIVMSG":
-                self.privmsg(prefix, args[0], args[1] ,tags)
+                self.privmsg(prefix, args[0], args[1], tags)
             elif cmd == "WHISPER":
                 self.privmsg(prefix, args[0], args[1], tags)
-
         else:
-            #self.log.output("DEBUG: %s" % line_str)
+            self.log.output("DEBUG: %s" % line_str)
             irc.IRCClient.lineReceived(self, line)
 
     # Twitch support - Request Membership/Tags/Commands capabilities
@@ -162,11 +159,11 @@ class IRCBotClient(irc.IRCClient):
             length = self._safeMaximumLineLength(fmt)
 
         # Account for the line terminator.
-        minimumLength = len(fmt) + 2
-        if length <= minimumLength:
+        minimum_length = len(fmt) + 2
+        if length <= minimum_length:
             raise ValueError("Maximum length must exceed %d for message "
-                             "to %s" % (minimumLength, user))
-        for line in irc.split(message, length - minimumLength):
+                             "to %s" % (minimum_length, user))
+        for line in irc.split(message, length - minimum_length):
             self.sendLine(fmt + line)
 
     # Handles join events on IRC.
