@@ -4,7 +4,7 @@ import hashlib
 # Handles loading and checking user permissions. ###
 
 
-class UserPerm:
+class UserPermission:
     def __init__(self, sql, conf):
         self.sql = sql
         self.conf = conf
@@ -30,7 +30,7 @@ class UserPerm:
             self.load_bot_master()
             return True
         except Exception as err:
-            self.conf.log.output('Error while deleting user: %s' % err)
+            self.conf.log.info('Error while deleting user: %s' % err)
             return False
 
     # Loads the main bot master from configuration. ###

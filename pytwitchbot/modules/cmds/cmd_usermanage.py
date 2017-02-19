@@ -29,8 +29,7 @@ class CmdModuleUsermanage(CmdModule):
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def del_user_cmd(self, userinfo, dest, args):
         if self.irc.perms.check_perm(dest, self.get_perm_level()):
@@ -43,6 +42,5 @@ class CmdModuleUsermanage(CmdModule):
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 

@@ -1,4 +1,4 @@
-import platform
+import platform, logging
 
 from twisted.internet import threads
 from twisted.words.protocols import irc
@@ -7,8 +7,9 @@ from modules.cmdhandler import CmdHandler
 from modules.core.antiflood import BotAntiflood
 from modules.core.config import Config
 from modules.core.sqlitedb import SQLiteDB
-from modules.core.userperm import UserPerm
+from modules.core.userpermission import UserPermission
 
+from time import strftime, localtime
 
 # Handles IRC protocol/events for the bot. ###
 
@@ -25,20 +26,20 @@ class IRCBotClient(irc.IRCClient):
     versionEnv = platform.system() + ' ' + platform.release()
 
     # Initialization for the class ###
-    def __init__(self, log):
+    def __init__(self):
         self.channels = []
-        self.log = log
+        self.log = logging.getLogger('pyTwitchbot.IRCBotClient')
         self.cmd_prefix = self.conf.get_option('modules', 'command_prefix')
-        self.modhandler = CmdHandler(self.log, self)
+        self.modhandler = CmdHandler(self)
         self.sql = SQLiteDB(self.conf)
-        self.perms = UserPerm(self.sql, self.conf)
+        self.perms = UserPermission(self.sql, self.conf)
         self.bot_antiflood = BotAntiflood()
         self.bot_antiflood.setDaemon(True)
 
     # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
-        #self.log.output("DEBUG OUTPUT: %s" % line_str)
+        self.log.debug(line_str)
         if line_str.startswith('@'):
             tags = line_str[1:].split(':')[0].split(' ')[0].split(';')
             tags = dict(t.split('=') for t in tags)
@@ -101,7 +102,7 @@ class IRCBotClient(irc.IRCClient):
     def join(self, channel, key=None):
         if channel not in self.channels:
             irc.IRCClient.join(self, channel, key)
-            self.log.output('Joined %s.' % channel)
+            self.log.info('Joined %s.' % channel)
             self.channels.append(channel)
             self.save_channels()
         else:
@@ -111,7 +112,7 @@ class IRCBotClient(irc.IRCClient):
     def leave(self, channel, reason=None):
         if channel in self.channels:
             irc.IRCClient.leave(self, channel, reason)
-            self.log.output('Left %s.' % channel)
+            self.log.info('Left %s.' % channel)
             self.channels.remove(channel)
             self.save_channels()
         else:
@@ -181,6 +182,10 @@ class IRCBotClient(irc.IRCClient):
     def irc_QUIT(self, prefix, params):
         if prefix.split('!')[0] != self.nickname:
             self.modhandler.call_hook('quit', prefix, params)
+
+    @property
+    def get_local_time(self):
+        return strftime('%a, %d %b %Y %X', localtime())
 
     def rawDataReceived(self, data):
         pass

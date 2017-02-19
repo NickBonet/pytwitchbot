@@ -1,22 +1,26 @@
 #
-# PyIRCBot Logger Module ###
+# pyTwitchbot Logger Module ###
 # Author: K-Shadow    ###
 #
 
-from time import strftime, localtime
-
+import logging
 
 # Handles formatting output to console with timestamps. ###
 
-
 class Logger:
     def __init__(self):
-        pass
+        self.logger = logging.getLogger('pyTwitchbot')
+        self.logger.setLevel(logging.DEBUG)
+        console = logging.StreamHandler()
+        file = logging.FileHandler('pytwitchbot.log')
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s: %(message)s")
+        console.setLevel(logging.DEBUG)
+        file.setLevel(logging.DEBUG)
+        file.setFormatter(formatter)
+        console.setFormatter(formatter)
+        self.logger.addHandler(console)
+        self.logger.addHandler(file)
 
-    def output(self, data):
-        out = '[' + self.get_local_time + '] ' + data
-        print(out)
+    def output(self, output):
+        self.logger.info(output)
 
-    @property
-    def get_local_time(self):
-        return strftime('%a, %d %b %Y %X', localtime())

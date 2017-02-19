@@ -28,8 +28,7 @@ class CmdModuleModloader(CmdModule):
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def unload_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
@@ -40,13 +39,11 @@ class CmdModuleModloader(CmdModule):
                 elif unload == 2:
                     self.irc.msg(dest, 'Module %s isn\'t currently loaded.' % (args[1]))
                 else:
-                    self.irc.msg(
-                        dest, 'Error unloading %s module.' % (args[1]))
+                    self.irc.msg(dest, 'Error unloading %s module.' % (args[1]))
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def reload_mod(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
@@ -54,19 +51,16 @@ class CmdModuleModloader(CmdModule):
                 if self.irc.modhandler.reload_cmd_module(args[1]) is True:
                     self.irc.msg(dest, 'Reloaded %s module.' % (args[1]))
                 else:
-                    self.irc.msg(
-                        dest, 'Error reloading %s module.' % (args[1]))
+                    self.irc.msg(dest, 'Error reloading %s module.' % (args[1]))
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def reload_conf(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
             self.irc.conf.load_config()
             self.irc.msg(dest, 'Reloaded configuration file.')
         else:
-            self.irc.msg(
-                dest, 'You don\'t have permission to run that command!')
+            self.irc.msg(dest, 'You don\'t have permission to run that command!')
 

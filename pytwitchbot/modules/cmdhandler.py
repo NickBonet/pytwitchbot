@@ -1,12 +1,12 @@
-import sys
+import sys, logging
 
 
 # Handles loading/unloading command modules. ###
 
 
 class CmdHandler:
-    def __init__(self, log, irc):
-        self.log = log
+    def __init__(self, irc):
+        self.log = logging.getLogger('pyTwitchbot.modHandler')
         self.irc = irc
         self.commands = {}
         self.privcmds = {}
@@ -44,7 +44,7 @@ class CmdHandler:
     def load_cmd_module(self, module):
         # Checks if module is already loaded. ###
         if module in self.modules:
-            self.log.output('Command module %s is already loaded.' % module)
+            self.log.warning('Command module %s is already loaded.' % module)
             return False
 
         # If not, try to load the module! ###
@@ -55,7 +55,7 @@ class CmdHandler:
             mod = __import__("modules.cmds." + modname)
             mod = eval("mod.cmds." + modname)
             modinstance = getattr(
-                mod, 'CmdModule' + module.capitalize())(self.log, self.irc)
+                mod, 'CmdModule' + module.capitalize())(logging.getLogger("pyTwitchbot.modHandler." + modname), self.irc)
 
             # The instance of the module is stored in a
             # dictionary. ###
@@ -78,18 +78,18 @@ class CmdHandler:
             for hookname, hookfunc in modinstance.get_hooks().items():
                 self.add_hook(hookname, hookfunc)
 
-            self.log.output('Loaded %s module.' % module)
+            self.log.info('Loaded %s module.' % module)
             return True
 
         except Exception as err:
-            self.log.output('Error loading %s module: %s' % (module, err))
+            self.log.warning('Error loading %s module: %s' % (module, err))
             return False
 
     # Unloads a command module and its commands. ###
     def unload_cmd_module(self, module):
         # Checks if module is even loaded. ###
         if module not in self.modules:
-            self.log.output('Module %s is not loaded.' % (str(module)))
+            self.log.info('Module %s is not loaded.' % (str(module)))
             return 2
 
         # Gets the instance of the loaded module. ###
@@ -114,12 +114,12 @@ class CmdHandler:
             # The module is unloaded, and the module instance
             # is removed from the module handler's dictionary. ###
             sys.modules.pop('modules.cmds.cmd_' + module)
-            self.log.output('Module %s has been unloaded.' % module)
+            self.log.info('Module %s has been unloaded.' % module)
             del self.modules[module]
             return True
 
         except Exception as err:
-            self.log.output('Error unloading module %s: %s' % (module, err))
+            self.log.warning('Error unloading module %s: %s' % (module, err))
             return False
 
     # Simple way to reload modules. ###
@@ -134,7 +134,7 @@ class CmdHandler:
                 return False
 
         except Exception as err:
-            self.log.output('Error while reloading %s module: %s' % (module, err))
+            self.log.warning('Error while reloading %s module: %s' % (module, err))
             return False
 
     def get_help_text(self, command, channel):

@@ -32,7 +32,7 @@ class CmdModuleGithub(CmdModule):
                                  str(lastcommit['message'])))
                 self.irc.msg(dest, '[GitHub] Full commit URL: %s' % commiturl)
             except Exception as err:
-                print(err)
+                self.log.info('Error while retrieving last commit: %s' % err)
                 self.irc.msg(dest, 'Unable to retrieve repo\'s latest commit.')
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))

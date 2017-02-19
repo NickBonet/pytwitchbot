@@ -27,7 +27,7 @@ command_prefix = !
 autoload = modloader,join,quotes,help,facts,usermanage
 
 [sqlite]
-database = pyircbot.db
+database = pytwitchbot.db
 
 [github]
 user = test

@@ -28,11 +28,11 @@ class CmdModuleFacts(CmdModule):
         if len(args) > 2 and args[1] != '' and args[2] != '':
             try:
                 facttext = " ".join(args[2:])
-                date = self.log.get_local_time
+                date = self.irc.get_local_time
                 self.irc.sql.sql_query('INSERT INTO py_facts VALUES (?, ?, 0, ?, ?, ?)', (args[1], userinfo[0], date, dest, facttext,))
                 self.irc.msg(dest, 'Fact %s has been added to the database.' % (args[1]))
             except Exception as err:
-                self.log.output('Error while adding fact to the database: %s' % err)
+                self.log.warning('Error while adding fact to the database: %s' % err)
                 self.irc.msg(dest, 'Couldn\'t add %s to the fact database.' % args[1])
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
@@ -54,7 +54,7 @@ class CmdModuleFacts(CmdModule):
                 factname, factauthor, lockstatus, date, channel, facttext = self.irc.sql.fetch()
                 self.irc.msg(dest, 'Fact %s by %s: %s' % (factname, factauthor, facttext))
             except Exception as err:
-                self.log.output('Error grabbing fact from database: %s' % err)
+                self.log.warning('Error grabbing fact from database: %s' % err)
                 self.irc.msg(dest, 'That fact does not exist in the database!')
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))

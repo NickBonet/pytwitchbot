@@ -5,13 +5,10 @@ from modules.core.logger import Logger
 
 log = Logger()
 
-
 # Creates an instance of the protocol. ###
-
-
 class IRCBotFactory(protocol.ClientFactory):
     def __init__(self):
-        self.protocol = IRCBotClient(log)
+        self.protocol = IRCBotClient()
 
     def buildProtocol(self, addr):
         return self.protocol
@@ -27,6 +24,6 @@ class IRCBotFactory(protocol.ClientFactory):
 
 if __name__ == '__main__':
     bot = IRCBotFactory()
-    log.output("PyIRCBot started.")
+    log.output("pyTwitchbot started.")
     reactor.connectTCP(bot.protocol.get_server(), bot.protocol.get_port(), bot)
     reactor.run()
