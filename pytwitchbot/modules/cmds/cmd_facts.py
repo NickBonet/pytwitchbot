@@ -28,9 +28,8 @@ class CmdModuleFacts(CmdModule):
         if len(args) > 2 and args[1] != '' and args[2] != '':
             try:
                 facttext = " ".join(args[2:])
-                date = self.irc.get_local_time
                 self.irc.sql.query('INSERT INTO py_facts VALUES (?, ?, 0, ?, ?, ?)',
-                                   (args[1], userinfo[0], date, dest, facttext,))
+                                   (args[1], userinfo[0], self.irc.get_local_time, dest, facttext,))
                 self.irc.msg(dest, 'Fact %s has been added to the database.' % (args[1]))
             except Exception as err:
                 self.log.warning('Error while adding fact: %s' % err)
@@ -113,8 +112,9 @@ class CmdModuleFacts(CmdModule):
                 else:
                     lockstatus = "Locked"
                 self.irc.msg(dest, 'Fact info for %s:' % factname)
-                self.irc.msg(dest, 'Fact author: %s | Fact lock status: %s | Date of when fact was added: %s | '
-                                   'Channel fact was added in: %s' % (factauthor, lockstatus, date, channel))
+                self.irc.msg(dest, 'Fact author: %s | Fact lock status: %s | '
+                                   'Date of when fact was added/modified: %s | Channel fact was added in: %s'
+                             % (factauthor, lockstatus, date, channel))
             except TypeError:
                 self.irc.msg(dest, 'That fact doesn\'t exist!')
         else:
@@ -127,8 +127,8 @@ class CmdModuleFacts(CmdModule):
                 lockstatus = int(self.irc.sql.fetch()[2])
                 newtext = " ".join(args[2:])
                 if lockstatus == 0:
-                    self.irc.sql.query('UPDATE py_facts SET fact=?, factauthor=? WHERE factname=?',
-                                       (newtext, userinfo[0], args[1],))
+                    self.irc.sql.query('UPDATE py_facts SET fact=?, factauthor=?, date=? WHERE factname=?',
+                                       (newtext, userinfo[0], self.irc.get_local_time, args[1],))
                     self.irc.msg(dest, 'Fact has been changed.')
                 else:
                     self.irc.msg(dest, 'The fact you\'re trying to change is locked.')
