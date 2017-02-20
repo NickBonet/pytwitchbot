@@ -19,6 +19,7 @@ class CmdModuleUsermanage(CmdModule):
         self.mod_perm_level = 'BotAdmin'
         self.mod_type = 'priv'
 
+    # TODO: Only allow users to add a user with a perm level lower than their own
     def add_user_cmd(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 3:

@@ -13,6 +13,9 @@ class UserPermission:
 
     # Adds a user to the database. ###
     # TODO: Remember what my intended purpose was for user passwords
+    # TODO: Possibly add users who are mods in Twitch channels as mods for the bot automatically
+    # TODO: Add a method that reutns all of a user's info (besides password of course)
+    # TODO: Add a method to log when a user is using a ocmmand that requiires permissions
     def add_user(self, userinfo, passwd, level):
         if level in self.levels:
             self.sql.query('INSERT INTO py_users VALUES (?, ?, ?, ?, ?)',
@@ -41,7 +44,7 @@ class UserPermission:
         masternick = self.conf.get_option('botmaster', 'nick')
         masterhost = masternick + '.tmi.twitch.tv'
         masterpass = hashlib.sha1(str(self.conf.get_option('botmaster', 'pass')).encode('utf-8')).hexdigest()
-        infodict = {'ident': masternick, 'host': masterhost, 'level': self.levels['BotAdmin'], 'pass': masterpass}
+        infodict = {'ident': masternick, 'host': masterhost, 'level': 4, 'pass': masterpass}
         self.users.update({masternick: infodict})
 
     # Loads users from SQLite and stores them into a local dictionary. ###
