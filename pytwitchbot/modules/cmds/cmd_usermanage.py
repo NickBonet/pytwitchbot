@@ -9,9 +9,12 @@ from modules.cmds.cmdmodule import CmdModule
 class CmdModuleUsermanage(CmdModule):
     def __init__(self, log, irc):
         super().__init__(log, irc)
+        self.ranklist = ""
+        for x in self.irc.perms.levels:
+            self.ranklist = x + " " + self.ranklist
         self.cmd_dict = {
             'adduser': {'function': self.add_user_cmd, 'help':
-                        'adduser <nick> <password> <rank> - Adds a user to the database.'},
+                        'adduser <nick> <password> <rank> - Adds a user to the database. Ranks available for use are: %s' % self.ranklist},
             'deluser': {'function': self.del_user_cmd, 'help': 'deluser <nick> - Deletes a user from the database.'}}
         self.mod_perm_level = 'BotAdmin'
         self.mod_type = 'priv'
@@ -22,7 +25,7 @@ class CmdModuleUsermanage(CmdModule):
                 user_host = args[1] + '.tmi.twitch.tv'
                 userinfo = [args[1], args[1], user_host]
                 passwd = hashlib.sha1(str(args[2]).encode('utf-8')).hexdigest()
-                level = int(args[3])
+                level = args[3]
                 if self.irc.perms.check_user_exists(args[1]) is False:
                     if self.irc.perms.add_user(userinfo, passwd, level):
                         self.irc.msg(dest, "User added!")

@@ -14,7 +14,7 @@ class UserPermission:
     # Adds a user to the database. ###
     # TODO: Remember what my intended purpose was for user passwords
     def add_user(self, userinfo, passwd, level):
-        if level <= 3:
+        if level in self.levels:
             self.sql.query('INSERT INTO py_users VALUES (?, ?, ?, ?, ?)',
                            (userinfo[0], userinfo[1], userinfo[2], passwd, self.levels[level]),)
             self.users = {}
