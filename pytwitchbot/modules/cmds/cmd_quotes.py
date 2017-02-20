@@ -33,8 +33,14 @@ class CmdModuleQuotes(CmdModule):
     def del_quote(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo[0], 1):
             if len(args) > 1 and args[1] != '':
-                self.irc.sql.query('DELETE FROM py_quotes WHERE qchid=? AND qchan=?', (int(args[1]), dest,))
-                self.irc.msg(dest, 'Quote has been removed from the database.')
+                try:
+                    self.irc.sql.query('SELECT * FROM py_quotes WHERE qchid=? AND qchan=?', (int(args[1]), dest,))
+                    qid, qchid, nick, chan, qdate, quote = self.irc.sql.fetch()
+                    if qchid == int(args[1]) and chan == dest:
+                        self.irc.sql.query('DELETE FROM py_quotes WHERE qchid=? AND qchan=?', (int(args[1]), dest,))
+                        self.irc.msg(dest, 'Quote has been removed from the database.')
+                except TypeError:
+                    self.irc.msg(dest, 'That quote doesn\'t exist in the database!')
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
@@ -48,7 +54,6 @@ class CmdModuleQuotes(CmdModule):
                 self.irc.msg(dest, 'Quote %i added by %s on %s:' % (qchid, nick, qdate))
                 self.irc.msg(dest, 'Quote: %s' % quote)
             except Exception as err:
-                self.log.warning('Error attempting to retrieve quote from database: %s' % err)
                 self.irc.msg(dest, 'That quote doesn\'t exist in the database!')
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
