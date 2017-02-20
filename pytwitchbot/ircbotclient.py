@@ -39,7 +39,7 @@ class IRCBotClient(irc.IRCClient):
     # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
-        self.log.debug(line_str)
+        #self.log.debug(line_str)
         if line_str.startswith('@'):
             tags = line_str[1:].split(':')[0].split(' ')[0].split(';')
             tags = dict(t.split('=') for t in tags)
@@ -49,6 +49,31 @@ class IRCBotClient(irc.IRCClient):
                 self.privmsg(prefix, args[0], args[1], tags)
             elif cmd == "WHISPER":
                 self.privmsg(prefix, args[0], args[1], tags)
+            # TODO: Don't have much need to process these for the moment, will just log in the mean time until the need arises
+            elif cmd == "USERSTATE":
+                self.log.info('USERSTATE: %s' % str(tags))
+            elif cmd == "ROOMSTATE":
+                self.log.info('ROOMSTATE: %s' % str(tags))
+            elif cmd == "USERNOTICE":
+                if len(args) == 2:
+                    self.log.info('User %s has resubscribed to the channel!: %s' % (tags['login'], args[1]))
+                else:
+                    self.log.info('User %s has resubscribed to the channel!' % tags['login'])
+            elif cmd == "HOSTTARGET":
+                if args[1].split(' ')[0] == "-":
+                    self.log.info('Exited host mode in %s.' % args[0])
+                else:
+                    self.log.info('%s now hosting %s with %s viewers.' % (args[0], args[1], args[2]))
+            elif cmd == "CLEARCHAT":
+                if len(args) == 1:
+                    self.log.info('Chat has been cleared in %s!' % args[0])
+                elif len(args) == 2:
+                    self.log.info('User %s has been banned from the chat.' % args[1])
+            elif cmd == "RECONNECT":
+                # TODO: Implement logic to reconnect and rejoin eventually
+                self.log.warnng('Received reconnect notice from the Twitch server!')
+            elif cmd == "NOTICE":
+                pass
         else:
             irc.IRCClient.lineReceived(self, line)
 
