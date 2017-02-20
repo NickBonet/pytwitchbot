@@ -1,7 +1,11 @@
+import asyncio
+from threading import Thread
+
 from twisted.internet import reactor, protocol
 
 from ircbotclient import IRCBotClient
 from modules.core.logger import Logger
+from pytwitchdiscord import DiscordBot
 
 log = Logger()
 
@@ -20,11 +24,21 @@ class IRCBotFactory(protocol.ClientFactory):
 
     # If the connection fails, stop the reactor. ###
     def clientConnectionFailed(self, connector, reason):
+        # noinspection PyUnresolvedReferences
         reactor.stop()
 
 
 if __name__ == '__main__':
     bot = IRCBotFactory()
+    discordBot = DiscordBot(bot.protocol.get_discord_token(),
+                            bot.protocol.get_discord_default_channel(),
+                            bot.protocol.get_discord_default_twitch_channel())
+    discordBot.set_irc_object(bot.protocol)
+    bot.protocol.set_discord_object(discordBot)
     log.output("pyTwitchbot started.")
+    # noinspection PyUnresolvedReferences
     reactor.connectTCP(bot.protocol.get_server(), bot.protocol.get_port(), bot)
-    reactor.run()
+    # noinspection PyUnresolvedReferences
+    Thread(target=reactor.run, args=(False,)).start()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(discordBot.run())

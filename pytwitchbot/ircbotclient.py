@@ -34,6 +34,7 @@ class IRCBotClient(irc.IRCClient):
         self.perms = UserPermission(self.sql, self.conf)
         self.bot_antiflood = BotAntiflood()
         self.bot_antiflood.setDaemon(True)
+        self.discord = None
 
     # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
@@ -113,6 +114,18 @@ class IRCBotClient(irc.IRCClient):
     def get_port(self):
         return self.conf.get_int('server', 'port')
 
+    # Returns the API token used to connect to Discord ###
+    def get_discord_token(self):
+        return self.conf.get_option('discord', 'token')
+
+    # Returns the ID of the default channel to communicate on Discord between Twitch. ###
+    def get_discord_default_channel(self):
+        return self.conf.get_option('discord', 'default_discord_channel')
+
+    # Returns the name of the default channel to communicate on Twitch between Discord. ###
+    def get_discord_default_twitch_channel(self):
+        return self.conf.get_option('discord', 'default_twitch_relay_channel')
+
     # When the MOTD is received, we assume it's safe to start joining
     # channels. ###
     def receivedMOTD(self, motd):
@@ -150,6 +163,9 @@ class IRCBotClient(irc.IRCClient):
         userhost = user.split('@')[1]
         userinfo = [usernick, userident, userhost]
         args = message.split(' ')
+
+        if channel.startswith('#'):
+            self.discord.send_to_discord('[Twitch %s] %s: %s' % (channel, usernick, message))
 
         if args[0] in self.modhandler.commands or self.modhandler.privcmds:
             if usernick not in self.bot_antiflood.flood:
@@ -211,6 +227,9 @@ class IRCBotClient(irc.IRCClient):
     @property
     def get_local_time(self):
         return strftime('%a, %d %b %Y %X', localtime())
+
+    def set_discord_object(self, discordobj):
+        self.discord = discordobj
 
     def rawDataReceived(self, data):
         pass

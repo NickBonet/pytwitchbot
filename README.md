@@ -25,6 +25,11 @@ autoload = modloader,join,quotes,help,facts,usermanage
 [sqlite]
 database = pytwitchbot.db
 
+[discord]
+token = discord_ouath_token
+default_discord_channel = discord_channel_id
+default_twitch_relay_channel = #twitch_channel
+
 [github]
 user = test
 pass = test
