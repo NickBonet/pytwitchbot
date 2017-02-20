@@ -9,19 +9,19 @@ class CmdModuleFacts(CmdModule):
         super().__init__(log, irc)
         self.cmd_dict = {
             'factadd': {'function': self.add_fact, 'help':
-                     'factadd <factname> <facttext> - Adds a fact to the fact database.'},
+                        'factadd <factname> <facttext> - Adds a fact to the fact database.'},
             'fact': {'function': self.read_fact, 'help':
-                      'fact <factname> - Displays a fact from the database.'},
+                     'fact <factname> - Displays a fact from the database.'},
             'factdel': {'function': self.del_fact, 'help':
-                     'factdel <factname> - Deletes a fact from the database.'},
+                        'factdel <factname> - Deletes a fact from the database.'},
             'factlock': {'function': self.lock_fact, 'help':
-                      'factlock <factname> - Locks a fact so it cannot be changed.'},
+                         'factlock <factname> - Locks a fact so it cannot be changed.'},
             'factunlock': {'function': self.unlock_fact, 'help':
-                        'factunlock <factname> - Unlocks a fact so it can be changed.'},
+                           'factunlock <factname> - Unlocks a fact so it can be changed.'},
             'factinfo': {'function': self.info_fact, 'help':
-                      'factinfo <factname> - Displays information about a fact.'},
+                         'factinfo <factname> - Displays information about a fact.'},
             'factchange': {'function': self.change_fact, 'help': 'factchange <factname> <facttext> -'
-                                                               ' Changes the text of a fact if it\'s not locked.'}}
+                           ' Changes the text of a fact if it\'s not locked.'}}
         self.mod_type = 'chan'
 
     def add_fact(self, userinfo, dest, args):
@@ -29,9 +29,11 @@ class CmdModuleFacts(CmdModule):
             try:
                 facttext = " ".join(args[2:])
                 date = self.irc.get_local_time
-                self.irc.sql.query('INSERT INTO py_facts VALUES (?, ?, 0, ?, ?, ?)', (args[1], userinfo[0], date, dest, facttext,))
+                self.irc.sql.query('INSERT INTO py_facts VALUES (?, ?, 0, ?, ?, ?)',
+                                   (args[1], userinfo[0], date, dest, facttext,))
                 self.irc.msg(dest, 'Fact %s has been added to the database.' % (args[1]))
             except Exception as err:
+                self.log.warning('Error while adding fact: %s' % err)
                 self.irc.msg(dest, 'Couldn\'t add %s to the fact database.' % args[1])
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
@@ -125,7 +127,8 @@ class CmdModuleFacts(CmdModule):
                 lockstatus = int(self.irc.sql.fetch()[2])
                 newtext = " ".join(args[2:])
                 if lockstatus == 0:
-                    self.irc.sql.query('UPDATE py_facts SET fact=?, factauthor=? WHERE factname=?', (newtext, userinfo[0], args[1],))
+                    self.irc.sql.query('UPDATE py_facts SET fact=?, factauthor=? WHERE factname=?',
+                                       (newtext, userinfo[0], args[1],))
                     self.irc.msg(dest, 'Fact has been changed.')
                 else:
                     self.irc.msg(dest, 'The fact you\'re trying to change is locked.')

@@ -10,7 +10,8 @@ class CmdModuleJoin(CmdModule):
         self.cmd_dict = {
             'join': {'function': self.join_chan_cmd, 'help':
                      'join <stream_channel> - Makes the bot join a different stream\'s chat.'},
-            'part': {'function': self.part_chan_cmd, 'help': 'part <stream_channel> - Makes the bot leave a different stream\'s chat.'}}
+            'part': {'function': self.part_chan_cmd, 'help':
+                     'part <stream_channel> - Makes the bot leave a different stream\'s chat.'}}
         self.hook_dict = {}
         self.mod_perm_level = 2
         self.mod_type = 'chan'

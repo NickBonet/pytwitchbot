@@ -5,6 +5,7 @@ from modules.core.logger import Logger
 
 log = Logger()
 
+
 # Creates an instance of the protocol. ###
 class IRCBotFactory(protocol.ClientFactory):
     def __init__(self):

@@ -7,6 +7,7 @@ import logging
 
 # Handles formatting output to console with timestamps. ###
 
+
 class Logger:
     def __init__(self):
         self.logger = logging.getLogger('pyTwitchbot')

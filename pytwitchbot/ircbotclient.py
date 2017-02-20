@@ -1,4 +1,6 @@
-import platform, logging
+import logging
+import platform
+from time import strftime, localtime
 
 from twisted.internet import threads
 from twisted.words.protocols import irc
@@ -9,7 +11,6 @@ from modules.core.config import Config
 from modules.core.sqlitedb import SQLiteDB
 from modules.core.userpermission import UserPermission
 
-from time import strftime, localtime
 
 # Handles IRC protocol/events for the bot. ###
 
@@ -39,17 +40,18 @@ class IRCBotClient(irc.IRCClient):
     # Processing tags in messages/processing Twitch IRCv3 commands such as WHISPER
     def lineReceived(self, line):
         line_str = line.decode('utf-8')
-        #self.log.debug(line_str)
+        # self.log.debug(line_str)
         if line_str.startswith('@'):
             tags = line_str[1:].split(':')[0].split(' ')[0].split(';')
             tags = dict(t.split('=') for t in tags)
             line_str = ':' + line_str.split(' :', 1)[1]
+            # noinspection PyTypeChecker
             prefix, cmd, args = irc.parsemsg(line_str)
             if cmd == "PRIVMSG":
                 self.privmsg(prefix, args[0], args[1], tags)
             elif cmd == "WHISPER":
                 self.privmsg(prefix, args[0], args[1], tags)
-            # TODO: Don't have much need to process these for the moment, will just log in the mean time until the need arises
+            # TODO: Don't have much need to process these for the moment, will just log for now
             elif cmd == "USERSTATE":
                 self.log.info('USERSTATE: %s' % str(tags))
             elif cmd == "ROOMSTATE":
@@ -71,7 +73,7 @@ class IRCBotClient(irc.IRCClient):
                     self.log.info('User %s has been banned from the chat.' % args[1])
             elif cmd == "RECONNECT":
                 # TODO: Implement logic to reconnect and rejoin eventually
-                self.log.warnng('Received reconnect notice from the Twitch server!')
+                self.log.warning('Received reconnect notice from the Twitch server!')
             elif cmd == "NOTICE":
                 pass
         else:

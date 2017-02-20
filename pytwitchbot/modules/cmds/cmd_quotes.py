@@ -24,7 +24,8 @@ class CmdModuleQuotes(CmdModule):
             date = self.irc.get_local_time
             self.irc.sql.query('SELECT IFNULL(MAX(qchid)+1,1) FROM py_quotes WHERE qchan=?', (dest,))
             qid = int(self.irc.sql.fetch()[0])
-            self.irc.sql.query('INSERT INTO py_quotes VALUES (null, ?, ?, ?, ?, ?)', (int(qid), userinfo[0], dest, date, quotetext,))
+            self.irc.sql.query('INSERT INTO py_quotes VALUES (null, ?, ?, ?, ?, ?)',
+                               (int(qid), userinfo[0], dest, date, quotetext,))
             self.irc.msg(dest, 'Quote #%i added to the database by %s:' % (qid, userinfo[0]))
             self.irc.msg(dest, 'Quote: %s' % (" ".join(args[1:])))
         else:
@@ -54,6 +55,7 @@ class CmdModuleQuotes(CmdModule):
                 self.irc.msg(dest, 'Quote %i added by %s on %s:' % (qchid, nick, qdate))
                 self.irc.msg(dest, 'Quote: %s' % quote)
             except Exception as err:
+                self.log.warning('Error while reading quote: %s' % err)
                 self.irc.msg(dest, 'That quote doesn\'t exist in the database!')
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))

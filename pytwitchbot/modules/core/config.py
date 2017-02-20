@@ -8,6 +8,7 @@ from configparser import ConfigParser
 
 # Loads and parses the configuration file for the bot. ###
 
+
 class Config:
     def __init__(self):
         self.log = logging.getLogger('pyTwitchbot.config')

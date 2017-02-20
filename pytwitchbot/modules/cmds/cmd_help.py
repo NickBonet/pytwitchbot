@@ -18,17 +18,19 @@ class CmdModuleHelp(CmdModule):
             elif args[1] in self.irc.modhandler.privcmds and not dest.startswith('#'):
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[1], "priv"))
             elif args[1] == "all":
-                list = ""
+                cmdlist = ""
                 if dest.startswith('#'):
                     for cmd in self.irc.modhandler.commands:
-                        list = list + cmd + " "
-                    self.irc.msg(dest, "Bot command list (for channels): %s" % list)
-                    self.irc.msg(dest, 'To view the list of commands available for use in private messages, whisper "!help all" to me directly.')
+                        cmdlist = cmdlist + cmd + " "
+                    self.irc.msg(dest, "Bot command list (for channels): %s" % cmdlist)
+                    self.irc.msg(dest, 'To view the list of commands available for use in private messages, '
+                                       'whisper "!help all" to me directly.')
                 else:
                     for cmd in self.irc.modhandler.privcmds:
-                        list = list + cmd + " "
-                    self.irc.msg(dest, "Bot command list (for private messages): %s" % list)
-                    self.irc.msg(dest, 'To view the list of commands available for use in channels, send "!help all" in any channel I\'m in.')
+                        cmdlist = cmdlist + cmd + " "
+                    self.irc.msg(dest, "Bot command list (for private messages): %s" % cmdlist)
+                    self.irc.msg(dest, 'To view the list of commands available for use in channels, '
+                                       'send "!help all" in any channel I\'m in.')
             else:
                 self.irc.msg(dest, 'Help for that command wasn\'t found.')
         else:

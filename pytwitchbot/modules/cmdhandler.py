@@ -1,4 +1,5 @@
-import sys, logging
+import logging
+import sys
 
 
 # Handles loading/unloading command modules. ###
@@ -55,7 +56,8 @@ class CmdHandler:
             mod = __import__("modules.cmds." + modname)
             mod = eval("mod.cmds." + modname)
             modinstance = getattr(
-                mod, 'CmdModule' + module.capitalize())(logging.getLogger("pyTwitchbot.modHandler." + modname), self.irc)
+                mod, 'CmdModule' + module.capitalize())(logging.getLogger("pyTwitchbot.modHandler." + modname),
+                                                        self.irc)
 
             # The instance of the module is stored in a
             # dictionary. ###
