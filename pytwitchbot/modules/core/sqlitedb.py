@@ -25,7 +25,7 @@ class SQLiteDB(object):
 
     # Performs an SQL query, passing any
     # arguments if necessary.
-    def sql_query(self, query, args=None):
+    def query(self, query, args=None):
         if args is not None:
             self.cur.execute(query, args)
         else:

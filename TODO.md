@@ -1,6 +1,6 @@
 # TODO
 
-- Finish implementing Twitch protocol commands
+- Finish implementing Twitch protocol commands (almost done, kinda)
 - Implement chat logging
 - Work on user permission system quite a bit
 - Work on making the module system more streamlined and flexible (kind of ties into permission system as well)

@@ -13,7 +13,7 @@ class UserPermission:
     # Adds a user to the database. ###
     def add_user(self, userinfo, passwd, level):
         if level <= 3:
-            self.sql.sql_query('INSERT INTO py_users VALUES (?, ?, ?, ?, ?)', (userinfo[0], userinfo[1],  userinfo[2], passwd, int(level),))
+            self.sql.query('INSERT INTO py_users VALUES (?, ?, ?, ?, ?)', (userinfo[0], userinfo[1], userinfo[2], passwd, int(level),))
             self.users = {}
             self.load_users()
             self.load_bot_master()
@@ -24,7 +24,7 @@ class UserPermission:
     # Deletes a user from the database. ###
     def del_user(self, user):
         try:
-            self.sql.sql_query('DELETE FROM py_users WHERE nick=?' % (user,))
+            self.sql.query('DELETE FROM py_users WHERE nick=?' % (user,))
             self.users = {}
             self.load_users()
             self.load_bot_master()
@@ -44,7 +44,7 @@ class UserPermission:
 
     # Loads users from SQLite and stores them into a local dictionary. ###
     def load_users(self):
-        self.sql.sql_query('SELECT * FROM py_users')
+        self.sql.query('SELECT * FROM py_users')
         for nick, ident, host, passwd, level in self.sql.fetch_all():
             infodict = {'ident': ident, 'host':host, 'level': level, 'pass': passwd}
             self.users.update({nick: infodict})
