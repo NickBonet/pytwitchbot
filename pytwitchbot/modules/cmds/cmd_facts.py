@@ -22,7 +22,7 @@ class CmdModuleFacts(CmdModule):
                       'factinfo <factname> - Displays information about a fact.'},
             'factchange': {'function': self.change_fact, 'help': 'factchange <factname> <facttext> -'
                                                                ' Changes the text of a fact if it\'s not locked.'}}
-        self.mod_type = 'all'
+        self.mod_type = 'chan'
 
     def add_fact(self, userinfo, dest, args):
         if len(args) > 2 and args[1] != '' and args[2] != '':
@@ -32,7 +32,6 @@ class CmdModuleFacts(CmdModule):
                 self.irc.sql.query('INSERT INTO py_facts VALUES (?, ?, 0, ?, ?, ?)', (args[1], userinfo[0], date, dest, facttext,))
                 self.irc.msg(dest, 'Fact %s has been added to the database.' % (args[1]))
             except Exception as err:
-                self.log.warning('Error while adding fact to the database: %s' % err)
                 self.irc.msg(dest, 'Couldn\'t add %s to the fact database.' % args[1])
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
