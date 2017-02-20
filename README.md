@@ -7,8 +7,9 @@ README to be updated shortly.
 ```
 [server]
 address = irc.chat.twitch.tv
-port = 6667
+port = 6697 # Use port 6697 for SSL, 6667 for regular connections
 channels = #twitch_channel
+use_ssl = 1
 
 [info]
 nickname = pystreambot

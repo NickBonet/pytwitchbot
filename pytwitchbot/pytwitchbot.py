@@ -1,7 +1,7 @@
 import asyncio
 from threading import Thread
 
-from twisted.internet import reactor, protocol
+from twisted.internet import ssl, reactor, protocol
 
 from ircbotclient import IRCBotClient
 from modules.core.logger import Logger
@@ -37,7 +37,11 @@ if __name__ == '__main__':
     bot.protocol.set_discord_object(discordBot)
     log.output("pyTwitchbot started.")
     # noinspection PyUnresolvedReferences
-    reactor.connectTCP(bot.protocol.get_server(), bot.protocol.get_port(), bot)
+    if bot.protocol.get_use_ssl() == 1:
+        # noinspection PyUnresolvedReferences
+        reactor.connectSSL(bot.protocol.get_server(), bot.protocol.get_port(), bot, ssl.ClientContextFactory())
+    else:
+        reactor.connectTCP(bot.protocol.get_server(), bot.protocol.get_port(), bot)
     # noinspection PyUnresolvedReferences
     Thread(target=reactor.run, args=(False,)).start()
     loop = asyncio.get_event_loop()

@@ -50,7 +50,6 @@ class IRCBotClient(irc.IRCClient):
                 self.privmsg(prefix, args[0], args[1], tags)
             elif cmd == "WHISPER":
                 self.privmsg(prefix, args[0], args[1], tags)
-            # TODO: Don't have much need to process these for the moment, will just log for now
             elif cmd == "USERSTATE":
                 self.log.info('USERSTATE: %s' % str(tags))
             elif cmd == "ROOMSTATE":
@@ -74,6 +73,7 @@ class IRCBotClient(irc.IRCClient):
                 # TODO: Implement logic to reconnect and rejoin eventually
                 self.log.warning('Received reconnect notice from the Twitch server!')
             elif cmd == "NOTICE":
+                # TODO: Finish implementing this for logging purposes
                 pass
         else:
             irc.IRCClient.lineReceived(self, line)
@@ -113,6 +113,11 @@ class IRCBotClient(irc.IRCClient):
     # Returns the port of the IRC server from configuration. ###
     def get_port(self):
         return self.conf.get_int('server', 'port')
+
+    # Returns the value of use_ssl from configuration,
+    # which determines whether SSL is used for the connection.
+    def get_use_ssl(self):
+        return self.conf.get_int('server', 'use_ssl')
 
     # Returns the API token used to connect to Discord ###
     def get_discord_token(self):
