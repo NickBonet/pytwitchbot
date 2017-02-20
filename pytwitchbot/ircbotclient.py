@@ -18,8 +18,6 @@ from modules.core.userpermission import UserPermission
 class IRCBotClient(irc.IRCClient):
     conf = Config()
     nickname = conf.get_option('info', 'nickname')
-    username = conf.get_option('info', 'username')
-    realname = conf.get_option('info', 'realname')
     password = conf.get_option('info', 'serverpass')
     lineRate = None
     versionName = 'pyTwitchBot'

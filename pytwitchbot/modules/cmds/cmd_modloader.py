@@ -15,11 +15,11 @@ class CmdModuleModloader(CmdModule):
             'reloadmod': {'function': self.reload_mod, 'help':
                           'reloadmod <module> - Reloads a module.'},
             'rehash': {'function': self.reload_conf, 'help': 'rehash - Reloads the configuration file.'}}
-        self.mod_perm_level = 3
+        self.mod_perm_level = 'BotAdmin'
         self.mod_type = 'all'
 
     def load_mod(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 if self.irc.modhandler.load_cmd_module(args[1]) is True:
                     self.irc.msg(dest, 'Loaded %s module.' % (args[1]))
@@ -31,7 +31,7 @@ class CmdModuleModloader(CmdModule):
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def unload_mod(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 unload = self.irc.modhandler.unload_cmd_module(args[1])
                 if unload is True:
@@ -46,7 +46,7 @@ class CmdModuleModloader(CmdModule):
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def reload_mod(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 if self.irc.modhandler.reload_cmd_module(args[1]) is True:
                     self.irc.msg(dest, 'Reloaded %s module.' % (args[1]))
@@ -58,7 +58,7 @@ class CmdModuleModloader(CmdModule):
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def reload_conf(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             self.irc.conf.load_config()
             self.irc.msg(dest, 'Reloaded configuration file.')
         else:

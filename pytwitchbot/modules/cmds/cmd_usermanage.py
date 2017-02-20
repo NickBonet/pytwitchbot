@@ -11,34 +11,41 @@ class CmdModuleUsermanage(CmdModule):
         super().__init__(log, irc)
         self.cmd_dict = {
             'adduser': {'function': self.add_user_cmd, 'help':
-                        'adduser <nick> <ident> <hostmask> <password> <rank> - Adds a user to the database.'},
+                        'adduser <nick> <password> <rank> - Adds a user to the database.'},
             'deluser': {'function': self.del_user_cmd, 'help': 'deluser <nick> - Deletes a user from the database.'}}
-        self.mod_perm_level = 3
+        self.mod_perm_level = 'BotAdmin'
         self.mod_type = 'priv'
 
     def add_user_cmd(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(dest, self.get_perm_level()):
-            if len(args) > 5:
-                userinfo = [args[1], args[2], args[3]]
-                passwd = hashlib.sha1(str(args[4]).encode('utf-8')).hexdigest()
-                level = int(args[5])
-                if self.irc.perms.add_user(userinfo, passwd, level):
-                    self.irc.msg(dest, "User added!")
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
+            if len(args) > 3:
+                user_host = args[1] + '.tmi.twitch.tv'
+                userinfo = [args[1], args[1], user_host]
+                passwd = hashlib.sha1(str(args[2]).encode('utf-8')).hexdigest()
+                level = int(args[3])
+                if self.irc.perms.check_user_exists(args[1]) is False:
+                    if self.irc.perms.add_user(userinfo, passwd, level):
+                        self.irc.msg(dest, "User added!")
+                    else:
+                        self.irc.msg(dest, 'Unable to add user to the database.')
                 else:
-                    self.irc.msg(dest, 'Unable to add user.')
+                    self.irc.msg(dest, 'A user with that nickname already exists in the database.')
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def del_user_cmd(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(dest, self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 user = args[1]
-                if self.irc.perms.del_user(user):
-                    self.irc.msg(dest, 'User deleted!')
+                if self.irc.perms.check_user_exists(user):
+                    if self.irc.perms.del_user(user):
+                        self.irc.msg(dest, 'User deleted!')
+                    else:
+                        self.irc.msg(dest, 'Unable to delete user from the database.')
                 else:
-                    self.irc.msg(dest, 'Unable to delete user.')
+                    self.irc.msg(dest, 'That user doesn\'t exist in the database.')
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
         else:

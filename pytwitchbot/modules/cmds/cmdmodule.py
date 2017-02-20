@@ -13,6 +13,7 @@ class CmdModule(object):
         # Defines whether the module is intended to work in channels only, private messages only, or both
         self.mod_type = ''
         # Defines what level of permission is required to run some or all commands in a module
+        # The permission levels defined in order from lowest to highest are: Mod, BotOp, BotAdmin
         self.mod_perm_level = None
 
     def get_cmds(self):

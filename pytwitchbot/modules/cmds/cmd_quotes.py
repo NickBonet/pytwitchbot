@@ -17,6 +17,7 @@ class CmdModuleQuotes(CmdModule):
             'qtotal': {'function': self.count_quotes, 'help':
                        'qtotal - Displays the total amount of quotes in the database for the current channel.'}}
         self.mod_type = 'chan'
+        self.mod_perm_level = 'Mod'
 
     def add_quote(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
@@ -32,7 +33,7 @@ class CmdModuleQuotes(CmdModule):
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
     def del_quote(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], 1):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 try:
                     self.irc.sql.query('SELECT * FROM py_quotes WHERE qchid=? AND qchan=?', (int(args[1]), dest,))

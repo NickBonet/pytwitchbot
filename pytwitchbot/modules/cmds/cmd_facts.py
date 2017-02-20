@@ -23,6 +23,7 @@ class CmdModuleFacts(CmdModule):
             'factchange': {'function': self.change_fact, 'help': 'factchange <factname> <facttext> -'
                            ' Changes the text of a fact if it\'s not locked.'}}
         self.mod_type = 'chan'
+        self.mod_perm_level = 'Mod'
 
     def add_fact(self, userinfo, dest, args):
         if len(args) > 2 and args[1] != '' and args[2] != '':
@@ -38,7 +39,7 @@ class CmdModuleFacts(CmdModule):
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
     def del_fact(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], 1):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 try:
                     self.irc.sql.query('SELECT * FROM py_facts WHERE factname=?', (args[1],))
@@ -67,7 +68,7 @@ class CmdModuleFacts(CmdModule):
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
     def lock_fact(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], 1):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 try:
                     self.irc.sql.query('SELECT * FROM py_facts WHERE factname=?', (args[1],))
@@ -85,7 +86,7 @@ class CmdModuleFacts(CmdModule):
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def unlock_fact(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], 1):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 try:
                     self.irc.sql.query('SELECT * FROM py_facts WHERE factname=?', (args[1],))

@@ -13,14 +13,14 @@ class CmdModuleJoin(CmdModule):
             'part': {'function': self.part_chan_cmd, 'help':
                      'part <stream_channel> - Makes the bot leave a different stream\'s chat.'}}
         self.hook_dict = {}
-        self.mod_perm_level = 2
+        self.mod_perm_level = 'BotOp'
         self.mod_type = 'chan'
 
     def greet_nn_join(self, prefix, params):
         self.irc.msg(params[0], 'Hello %s, welcome to the stream! Enjoy your stay.' % prefix.split('!')[0])
 
     def join_chan_cmd(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 if '#' + args[1] not in self.irc.channels:
                     self.irc.msg(dest, 'Joining channel %s.' % args[1])
@@ -33,7 +33,7 @@ class CmdModuleJoin(CmdModule):
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
     def part_chan_cmd(self, userinfo, dest, args):
-        if self.irc.perms.check_perm(userinfo[0], self.get_perm_level()):
+        if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             if len(args) > 1 and args[1] != '':
                 if '#' + args[1] in self.irc.channels:
                     self.irc.msg(dest, 'Parting channel %s.' % args[1])

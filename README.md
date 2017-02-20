@@ -12,14 +12,10 @@ channels = #twitch_channel
 
 [info]
 nickname = pystreambot
-username = pystreambot
-realname = pystreambot
 serverpass = oauth:goeshere
 
 [botmaster]
 nick = test
-ident = test
-host = *
 pass = test
 
 [modules]
