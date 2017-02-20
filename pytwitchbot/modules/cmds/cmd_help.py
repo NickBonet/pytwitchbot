@@ -11,6 +11,7 @@ class CmdModuleHelp(CmdModule):
         self.cmd_dict = {'help': {'function': self.help_cmd, 'help':
                          'help <command> - Shows help for a specified command.'}}
 
+    # noinspection PyUnusedLocal
     def help_cmd(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
             if args[1] in self.irc.modhandler.commands:

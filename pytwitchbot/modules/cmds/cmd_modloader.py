@@ -57,6 +57,7 @@ class CmdModuleModloader(CmdModule):
         else:
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
+    # noinspection PyUnusedLocal
     def reload_conf(self, userinfo, dest, args):
         if self.irc.perms.check_perm(userinfo, self.get_perm_level()):
             self.irc.conf.load_config()

@@ -13,6 +13,7 @@ class CmdModuleGithub(CmdModule):
         self.mod_type = 'chan'
         self.git = Github(self.irc.conf.get_option('github', 'user'), self.irc.conf.get_option('github', 'pass'))
 
+    # noinspection PyUnusedLocal
     def get_last_commit(self, userinfo, dest, args):
         commit = None
         if len(args) > 2 and args[1] != '' and args[2] != '':

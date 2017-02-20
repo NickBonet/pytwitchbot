@@ -14,7 +14,8 @@ class CmdModuleUsermanage(CmdModule):
             self.ranklist = x + " " + self.ranklist
         self.cmd_dict = {
             'adduser': {'function': self.add_user_cmd, 'help':
-                        'adduser <nick> <password> <rank> - Adds a user to the database. Ranks available for use are: %s' % self.ranklist},
+                        'adduser <nick> <password> <rank> - '
+                        'Adds a user to the database. Ranks available for use are: %s' % self.ranklist},
             'deluser': {'function': self.del_user_cmd, 'help': 'deluser <nick> - Deletes a user from the database.'}}
         self.mod_perm_level = 'BotAdmin'
         self.mod_type = 'priv'

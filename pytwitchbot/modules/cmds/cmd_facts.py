@@ -56,6 +56,7 @@ class CmdModuleFacts(CmdModule):
         else:
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
+    # noinspection PyUnusedLocal
     def read_fact(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
             try:
@@ -103,6 +104,7 @@ class CmdModuleFacts(CmdModule):
         else:
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
+    # noinspection PyUnusedLocal
     def info_fact(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
             try:

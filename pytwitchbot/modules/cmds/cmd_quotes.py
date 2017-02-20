@@ -48,6 +48,7 @@ class CmdModuleQuotes(CmdModule):
         else:
             self.irc.msg(dest, 'You don\'t have permission to run that command!')
 
+    # noinspection PyUnusedLocal
     def read_quote(self, userinfo, dest, args):
         if len(args) > 1 and args[1] != '':
             try:
@@ -61,6 +62,7 @@ class CmdModuleQuotes(CmdModule):
         else:
             self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))
 
+    # noinspection PyUnusedLocal,PyUnusedLocal
     def count_quotes(self, userinfo, dest, args):
         self.irc.sql.query('SELECT COUNT(*) FROM py_quotes WHERE qchan=?', (dest,))
         qtotal = self.irc.sql.fetch()
