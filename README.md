@@ -1,8 +1,26 @@
 # pytwitchbot
-A Twitch chat IRC bot, written in Python 3.x, utilizing the Twisted framework. Based off of one of my other projects, py-ircbot.
-README to be updated shortly.
+pyTwitchbot is a (work in progress) Twitch chat bot written in Python using the Twisted framework. pyTwitchbot is based off of one of my older projects, py-ircbot, 
+which has been adapted to connect to Twitch's IRC to provide modular chat bot functionality to a stream's chat. pyTwitchbot also currently has experimental Discord support to interface between Twitch chat and Discord chat, 
+creating even more possibilities in terms of modules and functionality.
 
-# Example configuration file for bot (save as pytwitchbot.conf in pytwitchbot folder)
+# License
+pyTwitchbot is licensed under the MIT license.
+- https://opensource.org/licenses/MIT
+
+# Dependencies
+In order to utilize the bot, the following are required:
+
+- Python 3.x (developed under 3.6 currently)
+- Twisted
+- discord.py
+- pyOpenSSL
+- PyGithub (optional, for github module)
+
+After all of the dependencies are installed:
+- Copy the example configuration below and save it as pytwitchbot.py in the pytwitchbot folder (same folder as pytwitchbot.py)
+- Setup the config file to your liking, then simply launch the bot by executing pytwitchbot.py!
+
+# Example configuration file
 
 ```
 [server]
