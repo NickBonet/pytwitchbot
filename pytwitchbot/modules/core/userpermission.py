@@ -1,4 +1,5 @@
 import hashlib
+import logging
 
 
 # Handles loading and checking user permissions. ###
@@ -8,6 +9,7 @@ class UserPermission:
     def __init__(self, sql, conf):
         self.sql = sql
         self.conf = conf
+        self.log = logging.getLogger("pyTwitchbot.UserPermission")
         self.users = {}
         self.levels = {'BotMaster': 4, 'BotAdmin': 3, 'BotOp': 2, 'Mod': 1}
 
@@ -36,7 +38,7 @@ class UserPermission:
             self.load_bot_master()
             return True
         except Exception as err:
-            self.conf.log.info('Error while deleting user: %s' % err)
+            self.log.info('Error while deleting user: %s' % err)
             return False
 
     # Loads the main bot master from configuration. ###
