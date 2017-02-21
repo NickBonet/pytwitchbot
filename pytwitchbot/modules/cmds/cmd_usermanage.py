@@ -39,6 +39,7 @@ class CmdModuleUsermanage(CmdModule):
                     else:
                         self.irc.msg(dest, 'Can\'t add a user with higher or equal permissions as you.')
                 except Exception as err:
+                    self.log.warning('Error while attempting to add user to the database: %s' % err)
                     self.irc.msg(dest, 'Error adding user to the database.')
             else:
                 self.irc.msg(dest, self.irc.modhandler.get_help_text(args[0], self.mod_type))

@@ -8,7 +8,7 @@ pyTwitchbot is licensed under the MIT license.
 - https://opensource.org/licenses/MIT
 
 # Dependencies
-In order to utilize the bot, the following are required:
+In order to utilize the bot, the following dependencies are required:
 
 - Python 3.x (developed under 3.6 currently)
 - Twisted

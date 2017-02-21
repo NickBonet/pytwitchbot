@@ -26,7 +26,7 @@ class CmdHandler:
         if cmd not in self.commands:
             self.commands.update({cmd: cmdfunc})
 
-    # Adds a command to the module handler's dictonary of commands for private
+    # Adds a command to the module handler's dictionary of commands for private
     # messages. ###
     def add_priv_cmd(self, cmd, cmdfunc):
         if cmd not in self.privcmds:
