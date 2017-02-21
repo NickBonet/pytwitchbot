@@ -1,6 +1,5 @@
 # TODO (in order of what I plan to do)
 
-- Finish the README (welp)
 - Work on user permission system quite a bit
 - Implement chat logging
 - Figure out a method to integrate other platforms (Discord (experimental support currently), IRC, etc)
