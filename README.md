@@ -13,7 +13,8 @@ In order to utilize the bot, the following dependencies are required:
 - Python 3.x (developed under 3.6 currently)
 - Twisted
 - discord.py
-- pyOpenSSL
+- pyOpenSSL 
+- service_identity
 - PyGithub (optional, for github module)
 
 After all of the dependencies are installed:
