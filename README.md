@@ -18,7 +18,7 @@ In order to utilize the bot, the following dependencies are required:
 - PyGithub (optional, for github module)
 
 After all of the dependencies are installed:
-- Copy the example configuration below and save it as pytwitchbot.py in the pytwitchbot folder (same folder as pytwitchbot.py)
+- Copy the example configuration below and save it as pytwitchbot.conf in the pytwitchbot folder (same folder as pytwitchbot.py)
 - Setup the config file to your liking, then simply launch the bot by executing pytwitchbot.py!
 
 # Example configuration file
